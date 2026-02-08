@@ -770,7 +770,6 @@ tbody.innerHTML = `
 `;
 return;
 }
-
 tbody.innerHTML = winLossData.map((player, index) => {
 const rank = index + 1;
 let rankClass = 'rank';
@@ -991,6 +990,3 @@ document.getElementById('playerScore').addEventListener('keypress', function(e) 
     if (e.key === 'Enter') addScore();
 });
 </script>
-`;
-return;
-}
