@@ -928,6 +928,69 @@ tbody.innerHTML = `
 <p>Add your first score above to get started.</p>
 </td>
 </tr>
+
+tbody.innerHTML = scoreData.map((player, index) => {
+    const rank = index + 1;
+    let rankClass = 'rank';
+    if (rank === 1) rankClass += ' first';
+    else if (rank === 2) rankClass += ' second';
+    else if (rank === 3) rankClass += ' third';
+    
+    let toParClass = 'score even-par';
+    let toParDisplay = 'E';
+    
+    if (player.totalToPar > 0) {
+        toParClass = 'score over-par';
+        toParDisplay = `+${player.totalToPar}`;
+    } else if (player.totalToPar < 0) {
+        toParClass = 'score under-par';
+        toParDisplay = `${player.totalToPar}`;
+    } else if (player.totalToPar === 0 && player.rounds > 0) {
+        toParDisplay = 'E';
+    }
+    
+    const bestRoundToPar = player.bestRound > 0 ? player.bestRound - PAR : 0;
+    let bestRoundDisplay = player.bestRound > 0 ? `${player.bestRound}` : '-';
+    if (player.bestRound > 0) {
+        if (bestRoundToPar > 0) {
+            bestRoundDisplay += ` (+${bestRoundToPar})`;
+        } else if (bestRoundToPar < 0) {
+            bestRoundDisplay += ` (${bestRoundToPar})`;
+        } else {
+            bestRoundDisplay += ` (E)`;
+        }
+    }
+    
+    return `
+        <tr>
+            <td class="${rankClass}">#${rank}</td>
+            <td class="player-name">${player.name}</td>
+            <td class="${toParClass}">${toParDisplay}</td>
+            <td>${player.rounds}</td>
+            <td>${player.rounds > 0 ? player.average.toFixed(1) : '-'}</td>
+            <td>${bestRoundDisplay}</td>
+            <td class="actions">
+                <button class="btn-small btn-edit" onclick="editScorePlayer(${player.id})">Edit</button>
+                <button class="btn-small btn-delete" onclick="deleteScorePlayer(${player.id})">Delete</button>
+            </td>
+        </tr>
+    `;
+}).join('');
+}
+
+// Keyboard shortcuts
+document.getElementById('wlPlayerName').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') addWinLoss();
+});
+
+document.getElementById('parPlayerName').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') addScore();
+});
+
+document.getElementById('playerScore').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') addScore();
+});
+</script>
 `;
 return;
 }
